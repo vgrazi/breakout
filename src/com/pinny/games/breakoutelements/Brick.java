@@ -21,14 +21,12 @@ public class Brick extends GameElement{
     }
 
     public void redraw(Graphics2D g) {
-        if (!exploded) {
-            g.setColor(color);
-            g.fill3DRect(currentX + Coordinates.getLeftInset(), y + Coordinates.getBottomInset(), width, height, true);
-//        g.setColor(Color.black);
-//        g.setFont(new Font("Arial", Font.BOLD, 20));
-//        g.drawString(currentX + "," + y, x + 10, y+height);
-            moveElement();
+        if(exploded) {
+            return;
         }
+        g.setColor(color);
+        g.fill3DRect(currentX + Coordinates.getLeftInset(), y + Coordinates.getTopInset(), width, height, true);
+        moveElement();
     }
 
     /**

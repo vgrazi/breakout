@@ -10,9 +10,10 @@ public class Coordinates {
     private static boolean paused;
     private static int brickXSpacing = 110;
     private static int brickYSpacing = 50;
-    private static int nextBrickXPos = -Coordinates.brickXSpacing;;
+    private static int nextBrickXPos = -Coordinates.brickXSpacing;
     private static int nextBrickYPos;
     private static boolean gameWasClicked;
+    private static int score;
 
     public static boolean isPaused() {
         return paused;
@@ -71,7 +72,7 @@ public class Coordinates {
     }
 
     public static int getNextXPos() {
-        Coordinates.nextBrickXPos += Coordinates.brickXSpacing;
+        Coordinates.nextBrickXPos += Coordinates.brickXSpacing + leftInset;
         if(nextBrickXPos >= gameWidth-brickXSpacing) {
             nextBrickXPos = 0;
             nextBrickYPos += brickYSpacing;
@@ -88,5 +89,13 @@ public class Coordinates {
 
     public static void setGameWasClicked() {
         gameWasClicked = true;
+    }
+
+    public static int getScore() {
+        return score;
+    }
+
+    public static void setScore(int score) {
+        Coordinates.score = score;
     }
 }

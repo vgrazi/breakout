@@ -83,6 +83,7 @@ public class Breakout {
                         break;
                 }
                 brick.setExploded(true);
+                Coordinates.setScore(Coordinates.getScore() + 100);
                 System.out.println("Hit " + hitSide + " of brick " + i);
                 if(Coordinates.gameWasClicked()) {
                     Coordinates.setPaused(true);
@@ -93,7 +94,7 @@ public class Breakout {
 
     private void createGameElements() {
         for (int i = 0; i < 48; i++) {
-            addGameElement(new Brick(i, Coordinates.getNextXPos(), Coordinates.getNextYPos(), 75, 20, 2, 25, Color.red));
+            addGameElement(new Brick(i, Coordinates.getNextXPos() + 20, Coordinates.getNextYPos() + 20, 75, 20, 2, 25, Color.red));
         }
         bullet = new Bullet(DEFAULT_WIDTH / 2, 0, 15, 15, 20, 25, Color.white);
         addGameElement(bullet);
@@ -108,6 +109,9 @@ public class Breakout {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
+                g.setColor(Color.yellow);
+                g.draw3DRect(Coordinates.getLeftInset(), Coordinates.getTopInset(), Coordinates.getGameWidth(), Coordinates.getGameHeight(), true);
+                displayScore(g);
                 redrawElements((Graphics2D) g);
 
             }
@@ -130,13 +134,19 @@ public class Breakout {
         int y = (screenSize.height - height)/2;
         frame.setLocation(x,y);
         Coordinates.setLeftInset(frame.getInsets().left +10);
-        Coordinates.setBottomInset(frame.getInsets().bottom + 10);
+        Coordinates.setBottomInset(frame.getInsets().bottom + 20);
         Coordinates.setRightInset(frame.getInsets().right + 10);
         Coordinates.setTopInset(frame.getInsets().top +10);
         Coordinates.setGameWidth(width - Coordinates.getLeftInset() - Coordinates.getRightInset()-30);
         Coordinates.setGameHeight(height - Coordinates.getTopInset() - Coordinates.getBottomInset()-30);
         frame.setVisible(true);
         return mainPanel;
+    }
+
+    private void displayScore(Graphics g) {
+        g.setColor(Color.white);
+        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+        g.drawString("Score:" + Coordinates.getScore(), Coordinates.getLeftInset() + 10, Coordinates.getGameHeight() - Coordinates.getBottomInset());
     }
 
     private void redrawElements(Graphics2D g) {
