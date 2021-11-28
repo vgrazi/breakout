@@ -31,19 +31,23 @@ public class Bullet extends GameElement {
         // calculate the new x and y
         int newX = (int) (x + Math.cos(angle)*movePixels);
         int newY = (int) (y + Math.sin(angle)*movePixels);
-        if(newX > Coordinates.getGameWidth()) {
+        if(newX > Coordinates.getGameWidth() - Coordinates.getRightInset()) {
             // bounce off the right wall
             bounceToLeft();
+            newX = Coordinates.getGameWidth() - Coordinates.getRightInset();
         }
-        if (newX < 0) {
+        if (newX < Coordinates.getLeftInset()) {
             // bounce off the left wall
             bounceToRight();
+            newX = Coordinates.getLeftInset();
         }
-        if(newY > Coordinates.getGameHeight()) {
+        if(newY > Coordinates.getGameHeight() - Coordinates.getBottomInset()) {
             bounceUpOrDown();
+            newY = Coordinates.getGameHeight() - Coordinates.getBottomInset();
         }
-        if(newY < 0) {
+        if(newY < Coordinates.getTopInset()) {
             bounceUpOrDown();
+            newY = Coordinates.getTopInset();
         }
 //        else
         {
