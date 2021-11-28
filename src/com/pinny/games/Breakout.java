@@ -83,7 +83,7 @@ public class Breakout {
                         break;
                 }
                 brick.setExploded(true);
-                Coordinates.setScore(Coordinates.getScore() + 100);
+                Coordinates.setScore(Coordinates.getScore() + brick.getScore());
                 System.out.println("Hit " + hitSide + " of brick " + i);
                 if(Coordinates.gameWasClicked()) {
                     Coordinates.setPaused(true);

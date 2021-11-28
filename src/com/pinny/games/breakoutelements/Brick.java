@@ -7,6 +7,7 @@ import java.awt.*;
 public class Brick extends GameElement{
     private boolean forward = true;
     private boolean exploded;
+    private int score;
 
     public boolean isExploded() {
         return exploded;
@@ -16,8 +17,9 @@ public class Brick extends GameElement{
         this.exploded = exploded;
     }
 
-    public Brick(int id, int x, int y, int width, int height, int movePixels, int distance, Color color) {
+    public Brick(int id, int x, int y, int width, int height, int movePixels, int distance, Color color, int score) {
         super(x, y, width, height, movePixels, distance, color);
+        this.score = score;
     }
 
     public void redraw(Graphics2D g) {
@@ -44,6 +46,9 @@ public class Brick extends GameElement{
         }
     }
 
+    public int getScore() {
+        return score;
+    }
 
     public HitSide getHitSide(int x, int y, double angle) {
         while(angle < 0) {

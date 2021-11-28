@@ -1,4 +1,8 @@
 package com.pinny.games;
+import java.awt.Color;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Coordinates {
     private static int gameWidth;
@@ -14,6 +18,16 @@ public class Coordinates {
     private static int nextBrickYPos;
     private static boolean gameWasClicked;
     private static int score;
+    private static List<Color> colors = Arrays.asList(Color.RED, Color.orange, Color.yellow, Color.GREEN, Color.BLUE);
+    private static int[] scores = {500, 300, 150, 100, 50};
+    private static Color nextColor = colors.get(0);
+    private static int nextIndex = 1;
+
+    public static int getNextScore() {
+        return nextScore;
+    }
+
+    private static int nextScore = scores[0];
 
     public static boolean isPaused() {
         return paused;
@@ -76,6 +90,9 @@ public class Coordinates {
         if(nextBrickXPos >= gameWidth-brickXSpacing) {
             nextBrickXPos = 0;
             nextBrickYPos += brickYSpacing;
+            nextColor = colors.get(nextIndex);
+            nextScore = scores[nextIndex];
+            nextIndex++;
         }
         return nextBrickXPos + getLeftInset();
     }
@@ -98,4 +115,10 @@ public class Coordinates {
     public static void setScore(int score) {
         Coordinates.score = score;
     }
+
+    public static Color getNextColor(){
+        return nextColor;
+    }
+
+
 }
