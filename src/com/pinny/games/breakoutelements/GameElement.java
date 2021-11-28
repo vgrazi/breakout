@@ -1,7 +1,6 @@
-package com.pinny.breakout.gameelements;
+package com.pinny.games.breakoutelements;
 
 import java.awt.*;
-import java.util.logging.Logger;
 
 public abstract class GameElement  {
 

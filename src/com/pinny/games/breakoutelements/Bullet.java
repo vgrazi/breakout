@@ -1,8 +1,9 @@
-package com.pinny.breakout.gameelements;
+package com.pinny.games.breakoutelements;
 
-import com.pinny.breakout.Coordinates;
+import com.pinny.games.Coordinates;
 
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.logging.Logger;
 
 public class Bullet extends GameElement {
@@ -18,7 +19,7 @@ public class Bullet extends GameElement {
     @Override
     public void redraw(Graphics2D g) {
         g.setColor(color);
-        g.fillOval(x, y, width, height);
+        g.fillOval(x + Coordinates.getLeftInset(), /*Coordinates.getGameHeight() -*/ (y + Coordinates.getTopInset()), width, height);
         moveElement();
 
     }
@@ -29,24 +30,50 @@ public class Bullet extends GameElement {
         // then add the vector distance at the angle, to determine the new vector position, then take cos and sin to
         // calculate the new x and y
         int newX = (int) (x + Math.cos(angle)*movePixels);
-        int newY = (int) (y - Math.sin(angle)*movePixels);
+        int newY = (int) (y + Math.sin(angle)*movePixels);
         if(newX > Coordinates.getGameWidth()) {
-            // bounce off the left wall
-            angle = (Math.PI - angle);
+            // bounce off the right wall
+            bounceToLeft();
         }
         if (newX < 0) {
-            angle = angle - Math.PI/2;
+            // bounce off the left wall
+            bounceToRight();
         }
         if(newY > Coordinates.getGameHeight()) {
-            angle = -angle;
+            bounceUpOrDown();
         }
         if(newY < 0) {
-            angle = Math.PI - angle;
-//            newY = 20;
+            bounceUpOrDown();
         }
-        x = newX;
-        y = newY;
-        System.out.println(this);
+//        else
+        {
+            x = newX;
+            y = newY;
+        }
+        info(this.toString());
+    }
+
+    public void bounceUpOrDown() {
+        angle = -angle;
+    }
+
+    public void bounceToRight() {
+        angle = angle - Math.PI/2;
+    }
+
+    public void bounceToLeft() {
+        angle = (Math.PI - angle);
+    }
+
+    public int getXPos() {
+        return x;
+    }
+    public int getYPos() {
+        return y;
+    }
+
+    private void info(String string) {
+//        System.out.println(LocalDateTime.now() + " " + string);
     }
 
     @Override
@@ -56,5 +83,9 @@ public class Bullet extends GameElement {
                 ", x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    public double getAngle() {
+        return angle;
     }
 }
