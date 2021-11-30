@@ -45,7 +45,7 @@ public class Breakout {
                         mainPanel.repaint();
                         checkForHit();
                         try {
-                            MUTEX.wait(25);
+                            MUTEX.wait(15);
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
