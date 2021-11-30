@@ -75,7 +75,11 @@ public class Bullet extends GameElement {
     }
 
     public void bounceToRight() {
-        angle = angle - Math.PI/2;
+//        if (angle > Math.PI)
+            angle = angle - Math.PI / 2;
+//        else
+//            angle = -(angle - Math.PI / 2);
+        adjustAngle();
     }
 
     public void bounceToLeft() {

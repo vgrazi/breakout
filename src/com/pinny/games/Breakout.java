@@ -93,8 +93,8 @@ public class Breakout {
     }
 
     private void createGameElements() {
-        for (int i = 0; i < 48; i++) {
-            addGameElement(new Brick(i, Coordinates.getNextXPos() + 20, Coordinates.getNextYPos() + 20, 75, 20, 2, 25, Color.red));
+        for (int i = 0; i < 35; i++) {
+            addGameElement(new Brick(i, Coordinates.getNextXPos() + 20, Coordinates.getNextYPos() + 20, 110, 20, 2, 0, Coordinates.getNextColor(), Coordinates.getNextScore()));
         }
         bullet = new Bullet(DEFAULT_WIDTH / 2, 0, 15, 15, 20, 25, Color.white);
         addGameElement(bullet);
