@@ -24,6 +24,8 @@ public class Bullet extends GameElement {
 
     }
 
+    int counter = 0;
+
     @Override
     protected void moveElement() {
         // to calculate the new position (currentX, currentY), look at x, y, which is the last position
@@ -32,19 +34,22 @@ public class Bullet extends GameElement {
         int beforeAngle = getAngleInDegrees();
         int newX = (int) (x + Math.cos(angle) * movePixels);
         int newY = (int) (y + Math.sin(angle) * movePixels);
+        String edge = "";
         if (newX < Coordinates.getLeftInset()) {
+            edge += "left";
             // bounce off the left wall
             bounceToRight();
-            newX = Coordinates.getLeftInset();
         }
         if (newX > Coordinates.getGameWidth() - Coordinates.getRightInset()) {
+            edge += "right";
             // bounce off the right wall
             bounceToLeft();
             newX = Coordinates.getGameWidth() - Coordinates.getRightInset();
         }
         if (newY > Coordinates.getGameHeight() - Coordinates.getBottomInset()) {
+            edge += "bottom";
             bounceUpOrDown();
-            newY = Coordinates.getGameHeight() - Coordinates.getBottomInset();
+//            newY = Coordinates.getGameHeight() - Coordinates.getBottomInset();
         }
         if (newY < Coordinates.getTopInset()) {
             bounceUpOrDown();
@@ -52,13 +57,13 @@ public class Bullet extends GameElement {
         }
         int afterAngle = getAngleInDegrees();
         if (beforeAngle != afterAngle)
-            System.out.println("Changed " + beforeAngle + " to " + afterAngle);
+            info(counter++ + " Changed " + beforeAngle + " to " + afterAngle + " newX=" + newX + " new Y=" + newY + " Edge:" + edge);
 //        else
         {
             x = newX;
             y = newY;
         }
-        info(this.toString());
+//        info(this.toString());
     }
 
     private void displayAngle() {
@@ -75,10 +80,10 @@ public class Bullet extends GameElement {
     }
 
     public void bounceToRight() {
-//        if (angle > Math.PI)
+        if (angle <= Math.PI)
             angle = angle - Math.PI / 2;
-//        else
-//            angle = -(angle - Math.PI / 2);
+        else
+            angle = (angle + Math.PI / 2);
         adjustAngle();
     }
 
@@ -105,7 +110,7 @@ public class Bullet extends GameElement {
     }
 
     private void info(String string) {
-//        System.out.println(LocalDateTime.now() + " " + string);
+        System.out.println(LocalDateTime.now() + " " + string);
     }
 
     @Override

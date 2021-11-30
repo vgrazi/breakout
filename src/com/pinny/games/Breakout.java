@@ -96,7 +96,7 @@ public class Breakout {
         for (int i = 0; i < 35; i++) {
             addGameElement(new Brick(i, Coordinates.getNextXPos() + 20, Coordinates.getNextYPos() + 20, 110, 20, 2, 0, Coordinates.getNextColor(), Coordinates.getNextScore()));
         }
-        bullet = new Bullet(DEFAULT_WIDTH / 2, 0, 15, 15, 20, 25, Color.white);
+        bullet = new Bullet(DEFAULT_WIDTH / 2, Coordinates.getGameHeight() - Coordinates.getBottomInset(), 15, 15, 20, 25, Color.white);
         addGameElement(bullet);
     }
 
@@ -111,6 +111,7 @@ public class Breakout {
                 super.paintComponent(g);
                 g.setColor(Color.yellow);
                 g.draw3DRect(Coordinates.getLeftInset(), Coordinates.getTopInset(), Coordinates.getGameWidth(), Coordinates.getGameHeight(), true);
+                displayPlayer(g);
                 displayScore(g);
                 redrawElements((Graphics2D) g);
 
@@ -141,6 +142,12 @@ public class Breakout {
         Coordinates.setGameHeight(height - Coordinates.getTopInset() - Coordinates.getBottomInset()-30);
         frame.setVisible(true);
         return mainPanel;
+    }
+
+    private void displayPlayer(Graphics g) {
+        g.setColor(Color.white);
+        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+        g.drawString("Player:" + "Pinny", Coordinates.getLeftInset() + 10, Coordinates.getGameHeight() - Coordinates.getBottomInset()*3);
     }
 
     private void displayScore(Graphics g) {

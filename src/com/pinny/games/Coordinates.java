@@ -14,7 +14,7 @@ public class Coordinates {
     private static boolean paused;
     private static int brickXSpacing = 110;
     private static int brickYSpacing = 50;
-    private static int nextBrickXPos = -Coordinates.brickXSpacing;
+    private static int nextBrickXPos = -Coordinates.brickXSpacing - leftInset;
     private static int nextBrickYPos;
     private static boolean gameWasClicked;
     private static int score;
@@ -59,6 +59,9 @@ public class Coordinates {
 
     public static void setLeftInset(int leftInset) {
         Coordinates.leftInset = leftInset;
+        // we can't set the initial nextBrickXPos until the left inset is set
+        nextBrickXPos = -Coordinates.brickXSpacing - leftInset;
+
     }
 
     public static int getRightInset() {
