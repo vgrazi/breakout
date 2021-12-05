@@ -37,9 +37,9 @@ public class Breakout {
         createGameElements();
         ExecutorService executor = Executors.newSingleThreadExecutor();
         running = true;
-        executor.submit(() -> {
+        executor.submit(()-> {
 
-            while (running) {
+            while(running) {
                 if (!Coordinates.isPaused()) {
                     synchronized (MUTEX) {
                         mainPanel.repaint();
@@ -85,7 +85,7 @@ public class Breakout {
                 brick.setExploded(true);
                 Coordinates.setScore(Coordinates.getScore() + brick.getScore());
                 System.out.println("Hit " + hitSide + " of brick " + i);
-                if (Coordinates.gameWasClicked()) {
+                if(Coordinates.gameWasClicked()) {
                     Coordinates.setPaused(true);
                 }
             }
@@ -105,7 +105,7 @@ public class Breakout {
      */
     private JPanel formatFrame(int width, int height) {
 
-        JPanel mainPanel = new JPanel() {
+        JPanel mainPanel = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -131,15 +131,15 @@ public class Breakout {
 
         frame.setSize(width, height);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screenSize.width - width) / 2;
-        int y = (screenSize.height - height) / 2;
-        frame.setLocation(x, y);
-        Coordinates.setLeftInset(frame.getInsets().left + 10);
+        int x = (screenSize.width - width)/2;
+        int y = (screenSize.height - height)/2;
+        frame.setLocation(x,y);
+        Coordinates.setLeftInset(frame.getInsets().left +10);
         Coordinates.setBottomInset(frame.getInsets().bottom + 20);
         Coordinates.setRightInset(frame.getInsets().right + 10);
-        Coordinates.setTopInset(frame.getInsets().top + 10);
-        Coordinates.setGameWidth(width - Coordinates.getLeftInset() - Coordinates.getRightInset() - 30);
-        Coordinates.setGameHeight(height - Coordinates.getTopInset() - Coordinates.getBottomInset() - 30);
+        Coordinates.setTopInset(frame.getInsets().top +10);
+        Coordinates.setGameWidth(width - Coordinates.getLeftInset() - Coordinates.getRightInset()-30);
+        Coordinates.setGameHeight(height - Coordinates.getTopInset() - Coordinates.getBottomInset()-30);
         frame.setVisible(true);
         return mainPanel;
     }
@@ -147,7 +147,7 @@ public class Breakout {
     private void displayPlayer(Graphics g) {
         g.setColor(Color.white);
         g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-        g.drawString("Player:" + "Pinny", Coordinates.getLeftInset() + 10, Coordinates.getGameHeight() - Coordinates.getBottomInset() * 3);
+        g.drawString("Player:" + "Pinny", Coordinates.getLeftInset() + 10, Coordinates.getGameHeight() - Coordinates.getBottomInset()*3);
     }
 
     private void displayScore(Graphics g) {
@@ -157,7 +157,7 @@ public class Breakout {
     }
 
     private void redrawElements(Graphics2D g) {
-        gameElements.forEach(element -> element.redraw(g));
+        gameElements.forEach(element->element.redraw(g));
     }
 
     public void addGameElement(GameElement e) {
