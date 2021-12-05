@@ -28,4 +28,12 @@ public abstract class GameElement  {
 
     public abstract void redraw(Graphics2D g);
     protected abstract void moveElement();
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 }

@@ -1,11 +1,9 @@
 package com.pinny.games;
 
-import com.pinny.games.breakoutelements.Brick;
-import com.pinny.games.breakoutelements.Bullet;
-import com.pinny.games.breakoutelements.GameElement;
-import com.pinny.games.breakoutelements.HitSide;
+import com.pinny.games.breakoutelements.*;
 
 import javax.swing.*;
+import javax.swing.text.Position;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -24,6 +22,7 @@ public class Breakout {
     private final List<GameElement> gameElements = new ArrayList<>();
     private volatile boolean running;
     private Bullet bullet;
+    private Paddle paddle;
     private final int DELAY = 20; // the speed in pixels per this. To make faster, decrease delay
 
 
@@ -59,16 +58,15 @@ public class Breakout {
         int x = bullet.getXPos();
         int y = bullet.getYPos();
         double angle = bullet.getAngle();
-        for (int i = 0; i < gameElements.size(); i++) {
-            GameElement gameElement = gameElements.get(i);
+        gameElements.forEach(gameElement -> {
             if (gameElement instanceof Brick) {
                 Brick brick = (Brick) gameElement;
                 if (brick.isExploded()) {
-                    continue;
+                    return;
                 }
                 HitSide hitSide = brick.getHitSide(x, y, angle);
                 if (hitSide == null) {
-                    continue;
+                    return;
                 }
                 switch (hitSide) {
                     case bottom:
@@ -84,20 +82,28 @@ public class Breakout {
                 }
                 brick.setExploded(true);
                 Coordinates.setScore(Coordinates.getScore() + brick.getScore());
-                System.out.println("Hit " + hitSide + " of brick " + i);
-                if(Coordinates.gameWasClicked()) {
+                if (Coordinates.gameWasClicked()) {
                     Coordinates.setPaused(true);
                 }
+            } else if (gameElement instanceof Paddle) {
+//                Double hitAngle = ((Paddle) gameElement).getHitAngle(bullet);
+//                if (hitAngle != null) {
+//                    bullet.setAngle(bullet.getAngle() - hitAngle);
+//                    bullet.bounceUpOrDown();
+//                    bullet.setAngle(bullet.getAngle() + hitAngle);
+//                }
             }
-        }
+        });
     }
 
     private void createGameElements() {
         for (int i = 0; i < 35; i++) {
             addGameElement(new Brick(i, Coordinates.getNextXPos() + 20, Coordinates.getNextYPos() + 20, 110, 20, 2, 0, Coordinates.getNextColor(), Coordinates.getNextScore()));
         }
-        bullet = new Bullet(DEFAULT_WIDTH / 2, Coordinates.getGameHeight() - Coordinates.getBottomInset(), 15, 15, 20, 25, Color.white);
+        bullet = new Bullet(DEFAULT_WIDTH -50, Coordinates.getGameHeight() - Coordinates.getBottomInset(), 15, 15, 20, 25, Color.white);
         addGameElement(bullet);
+        paddle = new Paddle(DEFAULT_WIDTH / 2, Coordinates.getGameHeight() - Coordinates.getBottomInset(), 60, 60, 20, 25, Color.white);
+        addGameElement(paddle);
     }
 
     /**
@@ -123,8 +129,20 @@ public class Breakout {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                Coordinates.setPaused(!Coordinates.isPaused());
-                Coordinates.setGameWasClicked();
+                if(e.getClickCount() == 1) {
+                    Coordinates.setPaused(!Coordinates.isPaused());
+                    Coordinates.setPauseOnHit(true);
+                }
+                else {
+                    Coordinates.setPauseOnHit(false);
+                }
+            }
+        });
+        mainPanel.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                super.mouseMoved(e);
+                paddle.setX(e.getX());
             }
         });
         frame.getContentPane().add(mainPanel);

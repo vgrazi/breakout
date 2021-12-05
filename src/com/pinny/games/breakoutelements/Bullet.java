@@ -57,8 +57,6 @@ public class Bullet extends GameElement {
         }
 
         int afterAngle = getAngleInDegrees();
-        if (beforeAngle != afterAngle)
-            info(counter++ + " Changed " + beforeAngle + " to " + afterAngle + " newX=" + newX + " new Y=" + newY + " Edge:" + edge);
 
         x = newX;
         y = newY;
@@ -105,10 +103,6 @@ public class Bullet extends GameElement {
         return y;
     }
 
-    private void info(String string) {
-        System.out.println(LocalDateTime.now() + " " + string);
-    }
-
     @Override
     public String toString() {
         return "Bullet{" +
@@ -120,5 +114,9 @@ public class Bullet extends GameElement {
 
     public double getAngle() {
         return angle;
+    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 }

@@ -1,7 +1,7 @@
 package com.pinny.games;
 import java.awt.Color;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Coordinates {
@@ -16,7 +16,7 @@ public class Coordinates {
     private static int brickYSpacing = 50;
     private static int nextBrickXPos = -Coordinates.brickXSpacing - leftInset;
     private static int nextBrickYPos;
-    private static boolean gameWasClicked;
+    private static boolean pauseOnHit;
     private static int score;
     private static List<Color> colors = Arrays.asList(Color.RED, Color.orange, Color.yellow, Color.GREEN, Color.BLUE);
     private static int[] scores = {500, 300, 150, 100, 50};
@@ -104,11 +104,11 @@ public class Coordinates {
     }
 
     public static boolean gameWasClicked() {
-        return gameWasClicked;
+        return pauseOnHit;
     }
 
-    public static void setGameWasClicked() {
-        gameWasClicked = true;
+    public static void setPauseOnHit(boolean flag) {
+        pauseOnHit = flag;
     }
 
     public static int getScore() {
@@ -123,5 +123,7 @@ public class Coordinates {
         return nextColor;
     }
 
-
+    public static void info(String string) {
+        System.out.println(LocalDateTime.now() + " " + string);
+    }
 }
