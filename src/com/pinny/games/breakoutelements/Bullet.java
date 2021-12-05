@@ -39,30 +39,29 @@ public class Bullet extends GameElement {
             edge += "left";
             // bounce off the left wall
             bounceToRight();
+            newX = 0;
         }
         if (newX > Coordinates.getGameWidth() - Coordinates.getRightInset()) {
             edge += "right";
             // bounce off the right wall
             bounceToLeft();
-            newX = Coordinates.getGameWidth() - Coordinates.getRightInset();
+            newX = Coordinates.getGameWidth() - Coordinates.getRightInset()*2;
         }
         if (newY > Coordinates.getGameHeight() - Coordinates.getBottomInset()) {
             edge += "bottom";
             bounceUpOrDown();
-//            newY = Coordinates.getGameHeight() - Coordinates.getBottomInset();
+            newY = Coordinates.getGameHeight() - Coordinates.getBottomInset();
         }
         if (newY < Coordinates.getTopInset()) {
             bounceUpOrDown();
-            newY = Coordinates.getTopInset();
         }
+
         int afterAngle = getAngleInDegrees();
         if (beforeAngle != afterAngle)
             info(counter++ + " Changed " + beforeAngle + " to " + afterAngle + " newX=" + newX + " new Y=" + newY + " Edge:" + edge);
-//        else
-        {
-            x = newX;
-            y = newY;
-        }
+
+        x = newX;
+        y = newY;
 //        info(this.toString());
     }
 
@@ -80,10 +79,7 @@ public class Bullet extends GameElement {
     }
 
     public void bounceToRight() {
-        if (angle <= Math.PI)
-            angle = angle - Math.PI / 2;
-        else
-            angle = (angle + Math.PI / 2);
+        angle = Math.PI - angle;
         adjustAngle();
     }
 
