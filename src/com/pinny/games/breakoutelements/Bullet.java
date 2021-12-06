@@ -3,8 +3,9 @@ package com.pinny.games.breakoutelements;
 import com.pinny.games.Coordinates;
 
 import java.awt.*;
-import java.time.LocalDateTime;
 import java.util.logging.Logger;
+
+import static com.pinny.games.Coordinates.info;
 
 public class Bullet extends GameElement {
     Logger logger = Logger.getLogger("Bullet");
@@ -19,7 +20,7 @@ public class Bullet extends GameElement {
     @Override
     public void redraw(Graphics2D g) {
         g.setColor(color);
-        g.fillOval(x + Coordinates.getLeftInset(), /*Coordinates.getGameHeight() -*/ (y + Coordinates.getTopInset()), width, height);
+        g.fillOval(x + Coordinates.getLeftInset(), Coordinates.getGameHeight() - (y + Coordinates.getTopInset()), width, height);
         moveElement();
 
     }
@@ -41,23 +42,25 @@ public class Bullet extends GameElement {
             bounceToRight();
             newX = 0;
         }
-        if (newX > Coordinates.getGameWidth() - Coordinates.getRightInset()) {
+        if (newX > Coordinates.getGameWidth()) {
             edge += "right";
             // bounce off the right wall
             bounceToLeft();
-            newX = Coordinates.getGameWidth() - Coordinates.getRightInset()*2;
+            newX = Coordinates.getGameWidth();
         }
-        if (newY > Coordinates.getGameHeight() - Coordinates.getBottomInset()) {
+        if (newY > Coordinates.getGameHeight()) {
             edge += "bottom";
             bounceUpOrDown();
-            newY = Coordinates.getGameHeight() - Coordinates.getBottomInset();
+            newY = Coordinates.getGameHeight();
         }
         if (newY < Coordinates.getTopInset()) {
+            info(this.toString());
+            edge += "top";
             bounceUpOrDown();
         }
 
         int afterAngle = getAngleInDegrees();
-
+        if (newY < 1) newY = 1;
         x = newX;
         y = newY;
 //        info(this.toString());

@@ -100,10 +100,8 @@ public class Breakout {
         for (int i = 0; i < 35; i++) {
             addGameElement(new Brick(i, Coordinates.getNextXPos() + 20, Coordinates.getNextYPos() + 20, 110, 20, 2, 0, Coordinates.getNextColor(), Coordinates.getNextScore()));
         }
-        bullet = new Bullet(DEFAULT_WIDTH -50, Coordinates.getGameHeight() - Coordinates.getBottomInset(), 15, 15, 20, 25, Color.white);
-        addGameElement(bullet);
-        paddle = new Paddle(DEFAULT_WIDTH / 2, Coordinates.getGameHeight() - Coordinates.getBottomInset(), 60, 60, 20, 25, Color.white);
-        addGameElement(paddle);
+        addGameElement(bullet = new Bullet(DEFAULT_WIDTH -50, 0, 15, 15, 20, 25, Color.white));
+        addGameElement(paddle = new Paddle(DEFAULT_WIDTH / 2, 0, 60, 60, 20, 25, Color.white));
     }
 
     /**

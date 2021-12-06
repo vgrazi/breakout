@@ -51,6 +51,7 @@ public class Coordinates {
 
     public static void setGameHeight(int gameHeight) {
         Coordinates.gameHeight = gameHeight;
+        nextBrickYPos = gameHeight - brickYSpacing;
     }
 
     public static int getLeftInset() {
@@ -92,7 +93,7 @@ public class Coordinates {
         Coordinates.nextBrickXPos += Coordinates.brickXSpacing + leftInset;
         if(nextBrickXPos >= gameWidth-brickXSpacing) {
             nextBrickXPos = 0;
-            nextBrickYPos += brickYSpacing;
+            nextBrickYPos -= brickYSpacing;
             nextColor = colors.get(nextIndex);
             nextScore = scores[nextIndex];
             nextIndex++;
