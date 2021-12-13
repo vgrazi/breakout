@@ -9,9 +9,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class Breakout {
     Logger logger = Logger.getLogger("Game");
@@ -31,7 +33,7 @@ public class Breakout {
     }
 
     private void launch(int width, int height) {
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel mainPanel = formatFrame(width, height);
         createGameElements();
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -58,6 +60,9 @@ public class Breakout {
         int x = bullet.getXPos();
         int y = bullet.getYPos();
         double angle = bullet.getAngle();
+        // before we iterate, remove any spent bullets
+        Set<GameElement> removed = gameElements.stream().filter(e -> e instanceof Bullet).filter(e -> ((Bullet) e).isRemoved()).collect(Collectors.toSet());
+        gameElements.removeAll(removed);
         gameElements.forEach(gameElement -> {
             if (gameElement instanceof Brick) {
                 Brick brick = (Brick) gameElement;
@@ -86,12 +91,12 @@ public class Breakout {
                     Coordinates.setPaused(true);
                 }
             } else if (gameElement instanceof Paddle) {
-//                Double hitAngle = ((Paddle) gameElement).getHitAngle(bullet);
-//                if (hitAngle != null) {
-//                    bullet.setAngle(bullet.getAngle() - hitAngle);
-//                    bullet.bounceUpOrDown();
-//                    bullet.setAngle(bullet.getAngle() + hitAngle);
-//                }
+                Double hitAngle = ((Paddle) gameElement).getHitAngle(bullet);
+                if (hitAngle != null) {
+                    bullet.setAngle(bullet.getAngle() + hitAngle);
+                    bullet.bounceUpOrDown();
+                    bullet.setAngle(bullet.getAngle() - hitAngle);
+                }
             }
         });
     }
@@ -100,8 +105,12 @@ public class Breakout {
         for (int i = 0; i < 35; i++) {
             addGameElement(new Brick(i, Coordinates.getNextXPos() + 20, Coordinates.getNextYPos() + 20, 110, 20, 2, 0, Coordinates.getNextColor(), Coordinates.getNextScore()));
         }
-        addGameElement(bullet = new Bullet(DEFAULT_WIDTH -50, 0, 15, 15, 20, 25, Color.white));
         addGameElement(paddle = new Paddle(DEFAULT_WIDTH / 2, 0, 60, 60, 20, 25, Color.white));
+        fire();
+    }
+
+    private void fire() {
+        addGameElement(bullet = new Bullet(DEFAULT_WIDTH -50, 0, 15, 15, 20, 25, Color.white));
     }
 
     /**
@@ -127,13 +136,16 @@ public class Breakout {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(e.getClickCount() == 1) {
-                    Coordinates.setPaused(!Coordinates.isPaused());
-                    Coordinates.setPauseOnHit(true);
+                if(e.getClickCount() == 2) {
+                    fire();
                 }
-                else {
-                    Coordinates.setPauseOnHit(false);
-                }
+//                if(e.getClickCount() == 1) {
+//                    Coordinates.setPaused(!Coordinates.isPaused());
+//                    Coordinates.setPauseOnHit(true);
+//                }
+//                else {
+//                    Coordinates.setPauseOnHit(false);
+//                }
             }
         });
         mainPanel.addMouseMotionListener(new MouseAdapter() {

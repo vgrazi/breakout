@@ -11,6 +11,7 @@ public class Bullet extends GameElement {
     Logger logger = Logger.getLogger("Bullet");
 
     private double angle = Math.PI / 6;
+    private boolean removed;
 
     public Bullet(int x, int y, int width, int height, int movePixels, int distance, Color color) {
         super(x, y, width, height, movePixels, distance, color);
@@ -19,6 +20,9 @@ public class Bullet extends GameElement {
 
     @Override
     public void redraw(Graphics2D g) {
+        if(removed) {
+            return;
+        }
         g.setColor(color);
         g.fillOval(x + Coordinates.getLeftInset(), Coordinates.getGameHeight() - (y + Coordinates.getTopInset()), width, height);
         moveElement();
@@ -36,7 +40,7 @@ public class Bullet extends GameElement {
         int newX = (int) (x + Math.cos(angle) * movePixels);
         int newY = (int) (y + Math.sin(angle) * movePixels);
         String edge = "";
-        if (newX < Coordinates.getLeftInset()) {
+        if (newX < 0) {
             edge += "left";
             // bounce off the left wall
             bounceToRight();
@@ -49,14 +53,14 @@ public class Bullet extends GameElement {
             newX = Coordinates.getGameWidth();
         }
         if (newY > Coordinates.getGameHeight()) {
-            edge += "bottom";
+            edge += "top";
             bounceUpOrDown();
             newY = Coordinates.getGameHeight();
         }
-        if (newY < Coordinates.getTopInset()) {
-            info(this.toString());
-            edge += "top";
-            bounceUpOrDown();
+        if (newY < 0) {
+//            info(this.toString());
+            edge += "bottom";
+            setRemoved();
         }
 
         int afterAngle = getAngleInDegrees();
@@ -64,6 +68,14 @@ public class Bullet extends GameElement {
         x = newX;
         y = newY;
 //        info(this.toString());
+    }
+
+    private void setRemoved() {
+        removed = true;
+    }
+
+    public boolean isRemoved() {
+        return removed;
     }
 
     private void displayAngle() {
@@ -96,6 +108,8 @@ public class Bullet extends GameElement {
         while (angle < 0) {
             angle += Math.PI * 2;
         }
+        if(angle == Math.PI) angle -= .1;
+        if(angle == 0) angle =.1;
     }
 
     public int getXPos() {
