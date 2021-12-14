@@ -3,7 +3,6 @@ package com.pinny.games;
 import com.pinny.games.breakoutelements.*;
 
 import javax.swing.*;
-import javax.swing.text.Position;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -25,7 +24,6 @@ public class Breakout {
     private volatile boolean running;
     private Bullet bullet;
     private Paddle paddle;
-    private final int DELAY = 20; // the speed in pixels per this. To make faster, decrease delay
 
 
     public static void main(String[] args) {
@@ -41,15 +39,13 @@ public class Breakout {
         executor.submit(()-> {
 
             while(running) {
-                if (!Coordinates.isPaused()) {
-                    synchronized (MUTEX) {
-                        mainPanel.repaint();
-                        checkForHit();
-                        try {
-                            MUTEX.wait(DELAY);
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
+                synchronized (MUTEX) {
+                    mainPanel.repaint();
+                    checkForHit();
+                    try {
+                        MUTEX.wait(Coordinates.DELAY);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                     }
                 }
             }
@@ -93,9 +89,9 @@ public class Breakout {
             } else if (gameElement instanceof Paddle) {
                 Double hitAngle = ((Paddle) gameElement).getHitAngle(bullet);
                 if (hitAngle != null) {
-                    bullet.setAngle(bullet.getAngle() + hitAngle);
-                    bullet.bounceUpOrDown();
                     bullet.setAngle(bullet.getAngle() - hitAngle);
+                    bullet.bounceUpOrDown();
+                    bullet.setAngle(bullet.getAngle() + hitAngle);
                 }
             }
         });
@@ -110,7 +106,7 @@ public class Breakout {
     }
 
     private void fire() {
-        addGameElement(bullet = new Bullet(DEFAULT_WIDTH -50, 0, 15, 15, 20, 25, Color.white));
+        addGameElement(bullet = new Bullet(DEFAULT_WIDTH -50, 0, 15, 15, 20, 25, Color.MAGENTA));
     }
 
     /**
@@ -123,7 +119,7 @@ public class Breakout {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 g.setColor(Color.yellow);
-                g.draw3DRect(Coordinates.getLeftInset(), Coordinates.getTopInset(), Coordinates.getGameWidth(), Coordinates.getGameHeight(), true);
+//                g.draw3DRect(Coordinates.getLeftInset(), Coordinates.getTopInset(), Coordinates.getGameWidth(), Coordinates.getGameHeight(), true);
                 displayPlayer(g);
                 displayScore(g);
                 redrawElements((Graphics2D) g);
@@ -136,8 +132,13 @@ public class Breakout {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(e.getClickCount() == 2) {
-                    fire();
+                switch(e.getClickCount()) {
+                    case 2:
+                        fire();
+                        break;
+                    case 3:
+                        Coordinates.setPaused(!Coordinates.isPaused());
+                        break;
                 }
 //                if(e.getClickCount() == 1) {
 //                    Coordinates.setPaused(!Coordinates.isPaused());
@@ -166,8 +167,8 @@ public class Breakout {
         Coordinates.setBottomInset(frame.getInsets().bottom + 20);
         Coordinates.setRightInset(frame.getInsets().right + 10);
         Coordinates.setTopInset(frame.getInsets().top +10);
-        Coordinates.setGameWidth(width - Coordinates.getLeftInset() - Coordinates.getRightInset()-30);
-        Coordinates.setGameHeight(height - Coordinates.getTopInset() - Coordinates.getBottomInset()-30);
+        Coordinates.setGameWidth(width);
+        Coordinates.setGameHeight(height);
         frame.setVisible(true);
         return mainPanel;
     }
@@ -175,13 +176,13 @@ public class Breakout {
     private void displayPlayer(Graphics g) {
         g.setColor(Color.white);
         g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-        g.drawString("Player:" + "Pinny", Coordinates.getLeftInset() + 10, Coordinates.getGameHeight() - Coordinates.getBottomInset()*3);
+        g.drawString("Player:" + "Pinny",  + 10, Coordinates.getGameHeight() - 135);
     }
 
     private void displayScore(Graphics g) {
         g.setColor(Color.white);
         g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-        g.drawString("Score:" + Coordinates.getScore(), Coordinates.getLeftInset() + 10, Coordinates.getGameHeight() - Coordinates.getBottomInset());
+        g.drawString("Score:" + Coordinates.getScore(),  + 10, Coordinates.getGameHeight()-100);
     }
 
     private void redrawElements(Graphics2D g) {

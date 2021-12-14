@@ -5,8 +5,6 @@ import com.pinny.games.Coordinates;
 import java.awt.*;
 import java.util.logging.Logger;
 
-import static com.pinny.games.Coordinates.info;
-
 public class Bullet extends GameElement {
     Logger logger = Logger.getLogger("Bullet");
 
@@ -23,9 +21,14 @@ public class Bullet extends GameElement {
         if(removed) {
             return;
         }
+        g.setColor(Color.black);
+        g.fillRect(45, 315, 100, 40);
         g.setColor(color);
-        g.fillOval(x + Coordinates.getLeftInset(), Coordinates.getGameHeight() - (y + Coordinates.getTopInset()), width, height);
-        moveElement();
+        g.fillOval(x, Coordinates.getGameHeight() - (y), width, height);
+        g.drawString(String.valueOf(Coordinates.getAngleInDegrees(angle)), 50, 350);
+        if(!Coordinates.isPaused()){
+            moveElement();
+        }
 
     }
 
@@ -46,7 +49,7 @@ public class Bullet extends GameElement {
             bounceToRight();
             newX = 0;
         }
-        if (newX > Coordinates.getGameWidth()) {
+        if (newX > Coordinates.getGameWidth() - width) {
             edge += "right";
             // bounce off the right wall
             bounceToLeft();
@@ -83,7 +86,7 @@ public class Bullet extends GameElement {
     }
 
     private int getAngleInDegrees() {
-        return (int) (angle / Math.PI * 180);
+        return Coordinates.getAngleInDegrees(angle);
     }
 
     public void bounceUpOrDown() {

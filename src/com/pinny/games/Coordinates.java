@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Coordinates {
+    public final static int DELAY = 50; // the speed in pixels per this. To make faster, decrease delay
     private static int gameWidth;
     private static int gameHeight;
     private static int leftInset;
@@ -54,9 +55,9 @@ public class Coordinates {
         nextBrickYPos = gameHeight - brickYSpacing;
     }
 
-    public static int getLeftInset() {
-        return leftInset;
-    }
+//    public static int getLeftInset() {
+//        return leftInset;
+//    }
 
     public static void setLeftInset(int leftInset) {
         Coordinates.leftInset = leftInset;
@@ -65,25 +66,25 @@ public class Coordinates {
 
     }
 
-    public static int getRightInset() {
-        return rightInset;
-    }
+//    public static int getRightInset() {
+//        return rightInset;
+//    }
 
     public static void setRightInset(int rightInset) {
         Coordinates.rightInset = rightInset;
     }
 
-    public static int getTopInset() {
-        return topInset;
-    }
+//    public static int getTopInset() {
+//        return topInset;
+//    }
 
     public static void setTopInset(int topInset) {
         Coordinates.topInset = topInset;
     }
 
-    public static int getBottomInset() {
-        return bottomInset;
-    }
+//    public static int getBottomInset() {
+//        return bottomInset;
+//    }
 
     public static void setBottomInset(int bottomInset) {
         Coordinates.bottomInset = bottomInset;
@@ -98,7 +99,7 @@ public class Coordinates {
             nextScore = scores[nextIndex];
             nextIndex++;
         }
-        return nextBrickXPos + getLeftInset();
+        return nextBrickXPos;
     }
     public static int getNextYPos() {
         return nextBrickYPos;
@@ -126,5 +127,9 @@ public class Coordinates {
 
     public static void info(String string) {
         System.out.println(LocalDateTime.now() + " " + string);
+    }
+
+    public static int getAngleInDegrees(double angle){
+        return (int) (angle / Math.PI * 180);
     }
 }

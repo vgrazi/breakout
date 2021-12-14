@@ -27,7 +27,7 @@ public class Brick extends GameElement{
             return;
         }
         g.setColor(color);
-        g.fill3DRect(currentX + Coordinates.getLeftInset(), Coordinates.getGameHeight() - (y + Coordinates.getTopInset()), width, height, true);
+        g.fill3DRect(currentX, Coordinates.getGameHeight() - (y), width, height, true);
         moveElement();
     }
 

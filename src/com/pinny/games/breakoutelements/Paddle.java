@@ -15,11 +15,11 @@ public class Paddle extends GameElement{
     @Override
     public void redraw(Graphics2D g){
         g.setColor(color);
-        g.fillArc(x, Coordinates.getGameHeight() - (y + Coordinates.getBottomInset()), width, height, 0, 180);
+        g.fillArc(x, Coordinates.getGameHeight() -y-height, width, height, 0, 180);
         if(hitXPos > 0 && hitYPos > 0)
         {
             g.setColor(Color.red);
-            g.drawString(hitXPos + "," + hitYPos, x, Coordinates.getGameHeight()- ((int) hitYPos) -30);
+            g.drawString(hitXPos + "," + hitYPos, 400, 400);
 //            g.drawLine(x, 0, x, Coordinates.getGameHeight());
         }
         moveElement();
@@ -51,6 +51,7 @@ public class Paddle extends GameElement{
 //                bullet.x, bullet.y, bullet.width, bullet.height,
 //                x, y, width, height));
 
+//        Coordinates.setPaused(true);
         return angle;
     }
 }
